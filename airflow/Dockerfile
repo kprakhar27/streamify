@@ -11,8 +11,12 @@ RUN apt-get update && \
 RUN pip install --upgrade pip
 # git gcc g++ -qqq
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir apache-airflow-providers-google
+RUN pip install --no-cache-dir pyarrow
+RUN pip install --no-cache-dir pandas
+RUN pip install --no-cache-dir sqlalchemy
+RUN pip install --no-cache-dir psycopg2-binary
+RUN pip install --no-cache-dir dbt-bigquery==1.0.0
 
 # Ref: https://airflow.apache.org/docs/docker-stack/recipes.html
 
@@ -29,10 +33,10 @@ RUN DOWNLOAD_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/goo
     && mkdir -p "${GCLOUD_HOME}" \
     && tar xzf "${TMP_DIR}/google-cloud-sdk.tar.gz" -C "${GCLOUD_HOME}" --strip-components=1 \
     && "${GCLOUD_HOME}/install.sh" \
-       --bash-completion=false \
-       --path-update=false \
-       --usage-reporting=false \
-       --quiet \
+    --bash-completion=false \
+    --path-update=false \
+    --usage-reporting=false \
+    --quiet \
     && rm -rf "${TMP_DIR}" \
     && gcloud --version
 
